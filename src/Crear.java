@@ -74,6 +74,7 @@ public class Crear extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         rdoNoPuede = new javax.swing.JRadioButton();
         rdoPuede = new javax.swing.JRadioButton();
+        btnPassword = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,7 +110,7 @@ public class Crear extends javax.swing.JFrame {
         });
 
         btnConfirmar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnConfirmar.setText("Confirmar");
+        btnConfirmar.setText("Crear Usuario");
         btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmarActionPerformed(evt);
@@ -129,6 +130,14 @@ public class Crear extends javax.swing.JFrame {
         rdoPuede.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdoPuedeActionPerformed(evt);
+            }
+        });
+
+        btnPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnPassword.setText("Cambiar Contraseña");
+        btnPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPasswordActionPerformed(evt);
             }
         });
 
@@ -158,16 +167,22 @@ public class Crear extends javax.swing.JFrame {
                                 .addGap(25, 25, 25)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(pswPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnConfirmar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(pswPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rdoNoPuede)
-                            .addComponent(rdoPuede, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rdoNoPuede)
+                                    .addComponent(rdoPuede, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(46, 46, 46)
+                                .addComponent(btnPassword)
+                                .addGap(0, 16, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(146, 146, 146)
                         .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(15, 15, 15))
         );
@@ -186,15 +201,20 @@ public class Crear extends javax.swing.JFrame {
                     .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rdoPuede))
-                .addGap(34, 34, 34)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pswPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pswPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pswPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pswPassword2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(btnPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -253,8 +273,13 @@ public class Crear extends javax.swing.JFrame {
                     valor = valor * -1;
                 }
                 if (pswPassword1.getText().equals(pswPassword2.getText())){
+                    if(pswPassword1.getText().length()<6){
+                        JOptionPane.showMessageDialog(null, "La contraseña debe ser minimo 6 caracteres", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                     nuevo = BCrypt.hashpw(pswPassword1.getText(), BCrypt.gensalt());
                     revisar = rdoPuede.isSelected();
+                    
                     try{
                            stm=conex.createStatement();
                            stm.executeUpdate("INSERT INTO usuarios VALUES(" + valor +",'"+ input2 +"','"+ nuevo +"',"+ revisar +")");
@@ -287,6 +312,47 @@ public class Crear extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_rdoPuedeActionPerformed
 
+    private void btnPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasswordActionPerformed
+        String input = txtRut.getText();
+        String input2 = txtNombre.getText();
+        int valor;
+        String nuevo;
+        boolean revisar = !txtRut.getText().trim().isEmpty() && !txtNombre.getText().trim().isEmpty()&& !pswPassword1.getText().trim().isEmpty();
+        if (input.matches("\\d+")) {
+            if(revisar){
+                valor = Integer.parseInt(input);
+                if(admin){
+                    valor = valor * -1;
+                }
+                if (pswPassword1.getText().equals(pswPassword2.getText())){
+                    if(pswPassword1.getText().length()<6){
+                        JOptionPane.showMessageDialog(null, "La contraseña debe ser minimo 6 caracteres", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    nuevo = BCrypt.hashpw(pswPassword1.getText(), BCrypt.gensalt());
+                    try{
+                           stm=conex.createStatement();
+                           int actualizado = stm.executeUpdate("UPDATE usuarios SET nomUsuario='" + input2 + "',password='"+nuevo+"' WHERE rutUsuario="+valor);
+                           if(actualizado == 0){
+                               JOptionPane.showMessageDialog(null, "Usuario No Existe");
+                           }
+                           else{JOptionPane.showMessageDialog(null, "Usuario Actualizado Exitosamente");}     
+                    }catch(SQLException ex){
+                           JOptionPane.showMessageDialog(null, "Error en database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);                       
+                    }
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Contraseñas deben ser iguales" , "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Complete Todas las Casillas" , "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Para Rut Ingrese Solo Numeros (Sin Puntos ni Guion)", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnPasswordActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -315,6 +381,7 @@ public class Crear extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btgPermisos;
     private javax.swing.JButton btnConfirmar;
+    private javax.swing.JButton btnPassword;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

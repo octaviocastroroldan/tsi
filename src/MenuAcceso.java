@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import seguridad.BCrypt;
 
 
 /*
@@ -67,7 +68,7 @@ public class MenuAcceso extends javax.swing.JFrame {
             }
         });
 
-        btnNuevo.setText("Crear Nueva Cuenta");
+        btnNuevo.setText("<html>  Crear Usuario  <br>Cambiar Contraseña</html>");
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoActionPerformed(evt);
@@ -115,8 +116,8 @@ public class MenuAcceso extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(197, 197, 197)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(btnIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnNuevo)))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(194, 194, 194)
                             .addComponent(lblMainName, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -167,16 +168,23 @@ public class MenuAcceso extends javax.swing.JFrame {
         try{
             stm=conex.createStatement();
             String input = txtUsuario.getText();
+            String inputPassword = pswPassword.getText(); 
             if(input.matches("\\d+")){
                 int valorReg = Integer.parseInt(input);
                 int valorAdmin =  valorReg * -1;
                 ResultSet lista = stm.executeQuery("SELECT * FROM usuarios WHERE rutUsuario IN (" + valorReg + "," + valorAdmin + ")" );
-                if(lista.next()){
-                    JOptionPane.showMessageDialog(null,"Usuario Encontrado");
-                    int valorObtenido = lista.getInt("rutUsuario");
-                    boolean estado = lista.getBoolean("prestamo");
-                    this.dispose(); 
-                    new MenuPrincipal(String.valueOf(valorObtenido), estado).setVisible(true); 
+                if(lista.next()){                   
+                    String hashedPassword = lista.getString("password");
+                    if(BCrypt.checkpw(inputPassword, hashedPassword)){
+                        JOptionPane.showMessageDialog(null,"Usuario Encontrado");
+                        int valorObtenido = lista.getInt("rutUsuario");
+                        boolean estado = lista.getBoolean("prestamo");
+                        this.dispose(); 
+                        new MenuPrincipal(String.valueOf(valorObtenido), estado).setVisible(true); 
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null,"Error de Contraseña", "Contraseña", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"Usuario no Existe", "No Existe", JOptionPane.WARNING_MESSAGE);
