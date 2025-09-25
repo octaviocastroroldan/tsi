@@ -233,7 +233,7 @@ public class Crear extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         this.dispose();
-        new Nuevo().setVisible(true);
+        new MenuAcceso().setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed

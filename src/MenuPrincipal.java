@@ -203,7 +203,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresoActionPerformed
 
     private void btnAdministradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdministradorActionPerformed
-        
+        this.dispose(); 
+        new Usuarios(usuario,permisos).setVisible(true);
     }//GEN-LAST:event_btnAdministradorActionPerformed
 
     private void btnVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentaActionPerformed
@@ -213,7 +214,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void btnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompraActionPerformed
         this.dispose(); 
-        new Compra(usuario,permisos).setVisible(true);
+        new Proveedores(usuario,permisos).setVisible(true);
     }//GEN-LAST:event_btnCompraActionPerformed
 
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
