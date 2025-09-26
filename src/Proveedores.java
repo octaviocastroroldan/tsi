@@ -234,7 +234,7 @@ public class Proveedores extends javax.swing.JFrame {
 
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
         this.dispose();
-        new Clientes(usuario,estado).setVisible(true);
+        new Inventario(usuario,permisos).setVisible(true);
     }//GEN-LAST:event_btnInventarioActionPerformed
 
     /**
