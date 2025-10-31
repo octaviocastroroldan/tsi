@@ -27,7 +27,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.usuario = nombre;
         this.permisos = estado;
         initComponents();
-        txtUsuario.setText(usuario);
         txtAdvertencia.setVisible(false);
         if (permisos == false){
             btnAdministrador.setEnabled(false);
@@ -47,7 +46,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnRegreso = new javax.swing.JButton();
         txtPrincipal = new javax.swing.JLabel();
-        txtUsuario = new javax.swing.JLabel();
         btnAdministrador = new javax.swing.JButton();
         txtAdvertencia = new javax.swing.JLabel();
         btnCompra = new javax.swing.JButton();
@@ -58,7 +56,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnRegreso.setText("Inicio");
+        btnRegreso.setText("Cerrar Sesión");
         btnRegreso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresoActionPerformed(evt);
@@ -67,9 +65,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         txtPrincipal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         txtPrincipal.setText("Menu Principal");
-
-        txtUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        txtUsuario.setText("txt");
 
         btnAdministrador.setText("Administración Usuarios");
         btnAdministrador.addActionListener(new java.awt.event.ActionListener() {
@@ -125,9 +120,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(217, 217, 217)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
                         .addComponent(btnCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -163,11 +156,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addComponent(btnRegreso, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(36, 36, 36)
+                    .addComponent(txtPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAdministrador, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -267,6 +257,5 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel txtAdvertencia;
     private javax.swing.JLabel txtPrincipal;
-    private javax.swing.JLabel txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

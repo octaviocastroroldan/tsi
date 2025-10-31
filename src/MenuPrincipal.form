@@ -42,10 +42,7 @@
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="217" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="txtUsuario" min="-2" pref="130" max="-2" attributes="0"/>
-                              <Component id="txtPrincipal" min="-2" pref="147" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="txtPrincipal" min="-2" pref="147" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
@@ -95,13 +92,9 @@
                           <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                           <Component id="btnRegreso" min="-2" pref="57" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="txtPrincipal" min="-2" pref="46" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtUsuario" min="-2" pref="37" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="txtPrincipal" alignment="0" min="-2" pref="46" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnClientes" alignment="3" min="-2" pref="62" max="-2" attributes="0"/>
                       <Component id="btnAdministrador" alignment="3" min="-2" pref="62" max="-2" attributes="0"/>
@@ -124,7 +117,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnRegreso">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Inicio"/>
+            <Property name="text" type="java.lang.String" value="Cerrar Sesi&#xf3;n"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegresoActionPerformed"/>
@@ -136,14 +129,6 @@
               <Font name="Segoe UI" size="18" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Menu Principal"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="txtUsuario">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI" size="18" style="1"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="txt"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnAdministrador">

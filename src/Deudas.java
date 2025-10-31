@@ -48,7 +48,7 @@ public class Deudas extends javax.swing.JFrame {
             }
         });
 
-        btnRegresar.setText("Inicio");
+        btnRegresar.setText("Cerrar Sesión");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresarActionPerformed(evt);

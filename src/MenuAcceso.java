@@ -176,7 +176,6 @@ public class MenuAcceso extends javax.swing.JFrame {
                 if(lista.next()){                   
                     String hashedPassword = lista.getString("password");
                     if(BCrypt.checkpw(inputPassword, hashedPassword)){
-                        JOptionPane.showMessageDialog(null,"Usuario Encontrado");
                         int valorObtenido = lista.getInt("rutUsuario");
                         boolean estado = lista.getBoolean("prestamo");
                         this.dispose(); 

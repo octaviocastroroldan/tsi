@@ -32,7 +32,6 @@ public class Usuarios extends javax.swing.JFrame {
         this.usuario = nombre;
         this.permisos = permisos;
         initComponents();
-        lblUsuario.setText(usuario);
         conectar();
         crearTabla();
     }
@@ -83,7 +82,6 @@ public class Usuarios extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         btnPrincipal = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
-        lblUsuario = new javax.swing.JLabel();
         scrTabla = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
         btnHistorialUsuario = new javax.swing.JButton();
@@ -106,15 +104,12 @@ public class Usuarios extends javax.swing.JFrame {
             }
         });
 
-        btnRegresar.setText("Inicio");
+        btnRegresar.setText("Cerrar Sesión");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresarActionPerformed(evt);
             }
         });
-
-        lblUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblUsuario.setText("txt");
 
         tblUsuarios.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
@@ -165,8 +160,6 @@ public class Usuarios extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(158, 158, 158)
                                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(20, 20, 20)
@@ -182,9 +175,7 @@ public class Usuarios extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -305,7 +296,6 @@ public class Usuarios extends javax.swing.JFrame {
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblUsuario;
     private javax.swing.JScrollPane scrTabla;
     private javax.swing.JTable tblUsuarios;
     // End of variables declaration//GEN-END:variables
