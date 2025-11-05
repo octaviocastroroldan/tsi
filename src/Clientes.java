@@ -1,3 +1,15 @@
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -8,7 +20,8 @@
  * @author oct88
  */
 public class Clientes extends javax.swing.JFrame {
-    
+    Connection conex=null;
+    Statement stm=null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Clientes.class.getName());
     private String usuario = "hello";
     private boolean permisos = false;
@@ -23,12 +36,49 @@ public class Clientes extends javax.swing.JFrame {
         this.usuario = nombre;
         this.permisos = permisos;
         initComponents();
-        lblUsuario.setText(usuario);
+        conectar();
+        customClose();
         txtAdvertencia.setVisible(false);
         if (permisos == false){
             btnNuevo.setEnabled(false);
             txtAdvertencia.setVisible(true);
         }
+    }
+    
+    public void customClose(){
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                registrarRetiro();
+                System.exit(0);
+            }
+        });
+    }
+    
+    public void registrarRetiro(){
+        int valor = Integer.parseInt(usuario);
+        try{
+            LocalDateTime ahora = LocalDateTime.now();
+            Timestamp tiempo = Timestamp.valueOf(ahora);
+            stm=conex.createStatement();
+            stm.executeUpdate("INSERT INTO accessLog (rutUsuario, tipoAccion, fechaAccion) VALUES("+valor+",0,'"+ tiempo +"')");
+            stm.close();
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error en database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return;
+    }
+    
+    public void conectar(){
+        String url="jdbc:mysql://localhost:3306/vistaalmar";
+        String usuario="root";
+        String pass="";
+        try{
+            conex=DriverManager.getConnection(url,usuario,pass);
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+        }       
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -41,7 +91,6 @@ public class Clientes extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
-        lblUsuario = new javax.swing.JLabel();
         btnPrincipal = new javax.swing.JButton();
         txtAdvertencia = new javax.swing.JLabel();
         btnNuevo = new javax.swing.JButton();
@@ -56,9 +105,6 @@ public class Clientes extends javax.swing.JFrame {
                 btnRegresarActionPerformed(evt);
             }
         });
-
-        lblUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblUsuario.setText("txt");
 
         btnPrincipal.setText("Menu Principal");
         btnPrincipal.addActionListener(new java.awt.event.ActionListener() {
@@ -95,17 +141,11 @@ public class Clientes extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 376, Short.MAX_VALUE)
-                        .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(102, 102, 102))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtAdvertencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(134, 134, 134)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(txtAdvertencia, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(134, 134, 134)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPrincipal))
@@ -118,29 +158,21 @@ public class Clientes extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(128, 128, 128)
-                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(txtAdvertencia)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(57, 57, 57)))))
+                        .addComponent(btnPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtAdvertencia)))
+                        .addGap(57, 57, 57)))
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
         );
@@ -162,6 +194,7 @@ public class Clientes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        registrarRetiro();
         this.dispose();
         new MenuAcceso().setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -172,6 +205,7 @@ public class Clientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPrincipalActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        registrarRetiro();
         System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 
@@ -212,7 +246,6 @@ public class Clientes extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblUsuario;
     private javax.swing.JLabel txtAdvertencia;
     // End of variables declaration//GEN-END:variables
 }

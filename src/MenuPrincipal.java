@@ -9,7 +9,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import javax.swing.JFrame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -39,11 +41,23 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.permisos = estado;
         conectar();
         initComponents();
+        customClose();
         txtAdvertencia.setVisible(false);
         if (permisos == false){
             btnAdministrador.setEnabled(false);
             txtAdvertencia.setVisible(true);
         }
+    }
+    
+    public void customClose(){
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                registrarRetiro();
+                System.exit(0);
+            }
+        });
     }
     
     public void conectar(){

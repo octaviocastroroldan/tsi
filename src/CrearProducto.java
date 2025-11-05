@@ -1,3 +1,5 @@
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 import seguridad.BCrypt;
 import java.sql.Connection;
@@ -7,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import javax.swing.JFrame;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -36,7 +39,19 @@ public class CrearProducto extends javax.swing.JFrame {
         initComponents();
         conectar();
         llenarCombo();
+        customClose();
         cmbTipo.setSelectedIndex(0);
+    }
+    
+    public void customClose(){
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                registrarRetiro();
+                System.exit(0);
+            }
+        });
     }
     
     public void registrarRetiro(){

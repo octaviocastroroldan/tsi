@@ -1,3 +1,16 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Connection;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -12,6 +25,8 @@ public class Venta extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Venta.class.getName());
     private String usuario = "hello";
     private boolean estado = false;
+    Connection conex=null;
+    Statement stm=null;
     /**
      * Creates new form Venta
      */
@@ -23,7 +38,44 @@ public class Venta extends javax.swing.JFrame {
         this.usuario = nuevo;
         this.estado = estado;
         initComponents();
-        lblUsuario.setText(usuario);
+        conectar();
+        customClose();
+    }
+    
+    public void customClose(){
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                registrarRetiro();
+                System.exit(0);
+            }
+        });
+    }
+    
+    public void conectar(){
+        String url="jdbc:mysql://localhost:3306/vistaalmar";
+        String usuario="root";
+        String pass="";
+        try{
+            conex=DriverManager.getConnection(url,usuario,pass);
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+        }       
+    }
+    
+    public void registrarRetiro(){
+        int valor = Integer.parseInt(usuario);
+        try{
+            LocalDateTime ahora = LocalDateTime.now();
+            Timestamp tiempo = Timestamp.valueOf(ahora);
+            stm=conex.createStatement();
+            stm.executeUpdate("INSERT INTO accessLog (rutUsuario, tipoAccion, fechaAccion) VALUES("+valor+",0,'"+ tiempo +"')");
+            stm.close();
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error en database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,7 +88,6 @@ public class Venta extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
-        lblUsuario = new javax.swing.JLabel();
         btnPrincipal = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -50,9 +101,6 @@ public class Venta extends javax.swing.JFrame {
                 btnRegresarActionPerformed(evt);
             }
         });
-
-        lblUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblUsuario.setText("txt");
 
         btnPrincipal.setText("Menu Principal");
         btnPrincipal.addActionListener(new java.awt.event.ActionListener() {
@@ -69,6 +117,11 @@ public class Venta extends javax.swing.JFrame {
         });
 
         jButton1.setText("Historial Boletas");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnInventario.setText("Inventario");
         btnInventario.addActionListener(new java.awt.event.ActionListener() {
@@ -90,11 +143,10 @@ public class Venta extends javax.swing.JFrame {
                         .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(132, 132, 132)
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(90, 90, 90)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(199, 199, 199)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(20, 20, 20))
         );
@@ -102,9 +154,7 @@ public class Venta extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(41, 41, 41)
@@ -136,6 +186,7 @@ public class Venta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        registrarRetiro();
         this.dispose(); 
         new MenuAcceso().setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -146,6 +197,7 @@ public class Venta extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPrincipalActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        registrarRetiro();
         System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 
@@ -153,6 +205,10 @@ public class Venta extends javax.swing.JFrame {
        this.dispose(); 
        new Inventario(usuario,estado).setVisible(true);
     }//GEN-LAST:event_btnInventarioActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -186,6 +242,5 @@ public class Venta extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblUsuario;
     // End of variables declaration//GEN-END:variables
 }

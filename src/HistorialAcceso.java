@@ -1,3 +1,5 @@
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
@@ -7,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
+import javax.swing.JFrame;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -36,17 +39,18 @@ public class HistorialAcceso extends javax.swing.JFrame {
         initComponents();
         conectar();
         crearTabla();
+        customClose();
     }
     
-    public void conectar(){
-        String url="jdbc:mysql://localhost:3306/vistaalmar";
-        String usuario="root";
-        String pass="";
-        try{
-            conex=DriverManager.getConnection(url,usuario,pass);
-        }catch(Exception ex){
-            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
-        }       
+    public void customClose(){
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                registrarRetiro();
+                System.exit(0);
+            }
+        });
     }
     
     public void registrarRetiro(){
@@ -62,6 +66,18 @@ public class HistorialAcceso extends javax.swing.JFrame {
         }
         return;
     }
+    
+    public void conectar(){
+        String url="jdbc:mysql://localhost:3306/vistaalmar";
+        String usuario="root";
+        String pass="";
+        try{
+            conex=DriverManager.getConnection(url,usuario,pass);
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+        }       
+    }
+    
     
     public void crearTabla(){
         try{

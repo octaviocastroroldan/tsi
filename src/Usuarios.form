@@ -175,7 +175,7 @@
         </Container>
         <Component class="javax.swing.JButton" name="btnHistorialUsuario">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Historial"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Historial&lt;br&gt;Usuario&lt;/html&gt;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHistorialUsuarioActionPerformed"/>

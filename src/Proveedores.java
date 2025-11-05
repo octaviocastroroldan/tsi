@@ -1,3 +1,15 @@
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -12,6 +24,8 @@ public class Proveedores extends javax.swing.JFrame {
     private boolean permisos = false;
     private String factura = "hello";
     private String proveedor = "12345";
+    Connection conex=null;
+    Statement stm=null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Proveedores.class.getName());
 
     /**
@@ -25,6 +39,44 @@ public class Proveedores extends javax.swing.JFrame {
         this.usuario = nombre;
         this.permisos = permisos;
         initComponents();
+        conectar();
+        customClose();
+    }
+    
+    public void customClose(){
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                registrarRetiro();
+                System.exit(0);
+            }
+        });
+    }
+    
+    public void registrarRetiro(){
+        int valor = Integer.parseInt(usuario);
+        try{
+            LocalDateTime ahora = LocalDateTime.now();
+            Timestamp tiempo = Timestamp.valueOf(ahora);
+            stm=conex.createStatement();
+            stm.executeUpdate("INSERT INTO accessLog (rutUsuario, tipoAccion, fechaAccion) VALUES("+valor+",0,'"+ tiempo +"')");
+            stm.close();
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error en database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return;
+    }
+    
+    public void conectar(){
+        String url="jdbc:mysql://localhost:3306/vistaalmar";
+        String usuario="root";
+        String pass="";
+        try{
+            conex=DriverManager.getConnection(url,usuario,pass);
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+        }       
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -189,11 +241,13 @@ public class Proveedores extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        registrarRetiro();
         this.dispose();
         new MenuAcceso().setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        registrarRetiro();
         System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 

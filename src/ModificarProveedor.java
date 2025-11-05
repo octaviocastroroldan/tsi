@@ -1,3 +1,15 @@
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -11,6 +23,8 @@ public class ModificarProveedor extends javax.swing.JFrame {
     private String usuario = "hello";
     private boolean permisos = false;
     private String proveedor = "hello";
+    Connection conex=null;
+    Statement stm=null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ModificarProveedor.class.getName());
 
     /**
@@ -25,7 +39,44 @@ public class ModificarProveedor extends javax.swing.JFrame {
         this.permisos = permisos;
         this.proveedor = proveedor;
         initComponents();
-        lblUsuario.setText(usuario);
+        conectar();
+        customClose();
+    }
+    
+    public void customClose(){
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                registrarRetiro();
+                System.exit(0);
+            }
+        });
+    }
+    
+    public void registrarRetiro(){
+        int valor = Integer.parseInt(usuario);
+        try{
+            LocalDateTime ahora = LocalDateTime.now();
+            Timestamp tiempo = Timestamp.valueOf(ahora);
+            stm=conex.createStatement();
+            stm.executeUpdate("INSERT INTO accessLog (rutUsuario, tipoAccion, fechaAccion) VALUES("+valor+",0,'"+ tiempo +"')");
+            stm.close();
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error en database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return;
+    }
+    
+    public void conectar(){
+        String url="jdbc:mysql://localhost:3306/vistaalmar";
+        String usuario="root";
+        String pass="";
+        try{
+            conex=DriverManager.getConnection(url,usuario,pass);
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+        }       
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,16 +88,12 @@ public class ModificarProveedor extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        lblUsuario = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
         btnPrincipal = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        lblUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblUsuario.setText("txt");
 
         btnRegresar.setText("Cerrar Sesión");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
@@ -94,18 +141,14 @@ public class ModificarProveedor extends javax.swing.JFrame {
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(138, 138, 138)
                         .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(23, 23, 23))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -132,6 +175,7 @@ public class ModificarProveedor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        registrarRetiro();
         this.dispose();
         new MenuAcceso().setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
@@ -142,6 +186,7 @@ public class ModificarProveedor extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPrincipalActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        registrarRetiro();
         System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 
@@ -181,6 +226,5 @@ public class ModificarProveedor extends javax.swing.JFrame {
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblUsuario;
     // End of variables declaration//GEN-END:variables
 }

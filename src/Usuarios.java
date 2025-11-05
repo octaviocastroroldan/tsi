@@ -1,3 +1,5 @@
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
@@ -7,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
+import javax.swing.JFrame;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -36,6 +39,18 @@ public class Usuarios extends javax.swing.JFrame {
         initComponents();
         conectar();
         crearTabla();
+        customClose();
+    }
+    
+    public void customClose(){
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                registrarRetiro();
+                System.exit(0);
+            }
+        });
     }
     
     public void conectar(){
@@ -142,7 +157,7 @@ public class Usuarios extends javax.swing.JFrame {
         tblUsuarios.setRowHeight(30);
         scrTabla.setViewportView(tblUsuarios);
 
-        btnHistorialUsuario.setText("Historial");
+        btnHistorialUsuario.setText("<html>Historial<br>Usuario</html>");
         btnHistorialUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHistorialUsuarioActionPerformed(evt);
