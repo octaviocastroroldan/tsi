@@ -1,5 +1,14 @@
 
 import java.awt.Color;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -16,6 +25,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
     private String usuario = "hello";
     private boolean permisos = false;
+    Connection conex=null;
+    Statement stm=null;
     /**
      * Creates new form MainMenu
      */
@@ -26,12 +37,38 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public MenuPrincipal(String nombre, boolean estado) {
         this.usuario = nombre;
         this.permisos = estado;
+        conectar();
         initComponents();
         txtAdvertencia.setVisible(false);
         if (permisos == false){
             btnAdministrador.setEnabled(false);
             txtAdvertencia.setVisible(true);
         }
+    }
+    
+    public void conectar(){
+        String url="jdbc:mysql://localhost:3306/vistaalmar";
+        String usuario="root";
+        String pass="";
+        try{
+            conex=DriverManager.getConnection(url,usuario,pass);
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+        }       
+    }
+    
+    public void registrarRetiro(){
+        int valor = Integer.parseInt(usuario);
+        try{
+            LocalDateTime ahora = LocalDateTime.now();
+            Timestamp tiempo = Timestamp.valueOf(ahora);
+            stm=conex.createStatement();
+            stm.executeUpdate("INSERT INTO accessLog (rutUsuario, tipoAccion, fechaAccion) VALUES("+valor+",0,'"+ tiempo +"')");
+            stm.close();
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error en database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return;
     }
 
     /**
@@ -188,7 +225,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresoActionPerformed
-        this.dispose(); 
+        registrarRetiro();
+        this.dispose();
         new MenuAcceso().setVisible(true); 
     }//GEN-LAST:event_btnRegresoActionPerformed
 
@@ -218,6 +256,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        registrarRetiro();
         System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 

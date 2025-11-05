@@ -1,11 +1,12 @@
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import seguridad.BCrypt;
+import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 
 /*
@@ -28,6 +29,19 @@ public class MenuAcceso extends javax.swing.JFrame {
     public MenuAcceso() {
         initComponents();
         conectar();
+    }
+    
+    public void registrarAcceso(int valor){
+        try{
+            LocalDateTime ahora = LocalDateTime.now();
+            Timestamp tiempo = Timestamp.valueOf(ahora);
+            stm=conex.createStatement();
+            stm.executeUpdate("INSERT INTO accessLog (rutUsuario, tipoAccion, fechaAccion) VALUES("+valor+",1,'"+ tiempo +"')");
+            stm.close();
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error en database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return;
     }
 
     public void conectar(){
@@ -178,15 +192,16 @@ public class MenuAcceso extends javax.swing.JFrame {
                     if(BCrypt.checkpw(inputPassword, hashedPassword)){
                         int valorObtenido = lista.getInt("rutUsuario");
                         boolean estado = lista.getBoolean("prestamo");
-                        this.dispose(); 
+                        this.dispose();
+                        registrarAcceso(valorObtenido);
                         new MenuPrincipal(String.valueOf(valorObtenido), estado).setVisible(true); 
                     }
                     else{
-                        JOptionPane.showMessageDialog(null,"Error de Contraseña", "Contraseña", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null,"Error de Credenciales", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
                 else{
-                    JOptionPane.showMessageDialog(null,"Usuario no Existe", "No Existe", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"Error de Credenciales", "Error", JOptionPane.WARNING_MESSAGE);
                 }
             }
             else{

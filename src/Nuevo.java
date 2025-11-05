@@ -25,7 +25,7 @@ public class Nuevo extends javax.swing.JFrame {
     public Nuevo() {
         initComponents();
         conectar();
-        rdoNo.setSelected(true);
+        btnConfirmar.setEnabled(false);
     }
 
     public void conectar(){
@@ -48,6 +48,7 @@ public class Nuevo extends javax.swing.JFrame {
     private void initComponents() {
 
         btgAdmin = new javax.swing.ButtonGroup();
+        btnAccion = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         btnRegresar = new javax.swing.JButton();
         btnConfirmar = new javax.swing.JButton();
@@ -59,6 +60,8 @@ public class Nuevo extends javax.swing.JFrame {
         lblAdmin = new javax.swing.JLabel();
         rdoSi = new javax.swing.JRadioButton();
         rdoNo = new javax.swing.JRadioButton();
+        rdoCrear = new javax.swing.JRadioButton();
+        rdoPassword = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,10 +100,38 @@ public class Nuevo extends javax.swing.JFrame {
         btgAdmin.add(rdoSi);
         rdoSi.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         rdoSi.setText("Si");
+        rdoSi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdoSiActionPerformed(evt);
+            }
+        });
 
         btgAdmin.add(rdoNo);
         rdoNo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         rdoNo.setText("No");
+        rdoNo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdoNoActionPerformed(evt);
+            }
+        });
+
+        btnAccion.add(rdoCrear);
+        rdoCrear.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        rdoCrear.setText("Crear Usuario");
+        rdoCrear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdoCrearActionPerformed(evt);
+            }
+        });
+
+        btnAccion.add(rdoPassword);
+        rdoPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        rdoPassword.setText("Cambiar Nombre/Contraseña");
+        rdoPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdoPasswordActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -113,29 +144,33 @@ public class Nuevo extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(122, 122, 122)
+                        .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pswPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(lblAdmin)
+                        .addGap(34, 34, 34)
+                        .addComponent(rdoSi, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rdoNo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(68, 68, 68)
                         .addComponent(lblRut)
                         .addGap(42, 42, 42)
                         .addComponent(txtRut, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(122, 122, 122)
-                        .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblAdmin)
-                                .addGap(36, 36, 36)
-                                .addComponent(rdoSi, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rdoNo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(pswPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(32, Short.MAX_VALUE))
+                        .addGap(87, 87, 87)
+                        .addComponent(rdoCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(rdoPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,12 +185,16 @@ public class Nuevo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pswPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPassword))
-                .addGap(47, 47, 47)
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rdoCrear)
+                    .addComponent(rdoPassword))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAdmin)
                     .addComponent(rdoSi)
                     .addComponent(rdoNo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -193,16 +232,22 @@ public class Nuevo extends javax.swing.JFrame {
             ResultSet lista = stm.executeQuery("SELECT * FROM usuarios WHERE rutUsuario = " + valor);
             if(lista.next()){
                 if(BCrypt.checkpw(pswPassword.getText(), lista.getString("password") )){
-                    JOptionPane.showMessageDialog(null, "Datos Confirmados");
-                    if(rdoNo.isSelected()){
-                        this.dispose();
-                        new Crear().setVisible(true);
+                    int valor1;
+                    int valor2;
+                    if(rdoCrear.isSelected()){
+                        valor1 = 0;
+                    }else{
+                        valor1 = 1;
+                    }
+                    if(rdoSi.isSelected()){
+                        valor2 = 0;
+                        JOptionPane.showMessageDialog(null, "Nuevo Administrador a Crear.");
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "Nuevo Administrador a Crear");
-                        this.dispose();
-                        new Crear(1).setVisible(true);
+                        valor2 = 1; 
                     }
+                    this.dispose();
+                    new Crear(valor1,valor2).setVisible(true);
                 }
                 
             }
@@ -223,6 +268,42 @@ public class Nuevo extends javax.swing.JFrame {
     private void pswPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_pswPasswordActionPerformed
+
+    private void rdoCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoCrearActionPerformed
+        if(rdoCrear.isSelected()== true){
+            rdoSi.setEnabled(true);
+            rdoNo.setEnabled(true);
+            lblAdmin.setEnabled(true);
+            if(rdoSi.isSelected() || rdoNo.isSelected()){
+                btnConfirmar.setEnabled(true);
+            }
+            else{
+                btnConfirmar.setEnabled(false);
+            }
+        }
+    }//GEN-LAST:event_rdoCrearActionPerformed
+
+    private void rdoPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoPasswordActionPerformed
+        if(rdoPassword.isSelected() == true){
+            rdoSi.setEnabled(false);
+            rdoNo.setEnabled(false);
+            lblAdmin.setEnabled(false);
+            btgAdmin.clearSelection();
+            btnConfirmar.setEnabled(true);
+        }
+    }//GEN-LAST:event_rdoPasswordActionPerformed
+
+    private void rdoSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoSiActionPerformed
+        if (rdoCrear.isSelected() && (rdoSi.isSelected() || rdoNo.isSelected())) {
+            btnConfirmar.setEnabled(true);
+        }
+    }//GEN-LAST:event_rdoSiActionPerformed
+
+    private void rdoNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoNoActionPerformed
+        if (rdoCrear.isSelected() && (rdoSi.isSelected() || rdoNo.isSelected())) {
+            btnConfirmar.setEnabled(true);
+        }
+    }//GEN-LAST:event_rdoNoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,6 +332,7 @@ public class Nuevo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btgAdmin;
+    private javax.swing.ButtonGroup btnAccion;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JPanel jPanel1;
@@ -259,7 +341,9 @@ public class Nuevo extends javax.swing.JFrame {
     private javax.swing.JLabel lblRut;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JPasswordField pswPassword;
+    private javax.swing.JRadioButton rdoCrear;
     private javax.swing.JRadioButton rdoNo;
+    private javax.swing.JRadioButton rdoPassword;
     private javax.swing.JRadioButton rdoSi;
     private javax.swing.JTextField txtRut;
     // End of variables declaration//GEN-END:variables
