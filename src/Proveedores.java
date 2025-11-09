@@ -3,12 +3,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -22,8 +26,6 @@ import javax.swing.JOptionPane;
 public class Proveedores extends javax.swing.JFrame {
     private String usuario = "hello";
     private boolean permisos = false;
-    private String factura = "hello";
-    private String proveedor = "12345";
     Connection conex=null;
     Statement stm=null;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Proveedores.class.getName());
@@ -39,8 +41,44 @@ public class Proveedores extends javax.swing.JFrame {
         this.usuario = nombre;
         this.permisos = permisos;
         initComponents();
+        tblProveedores.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         conectar();
+        crearTabla();
         customClose();
+    }
+    
+    public void crearTabla(){
+        try{
+            DefaultTableModel modeloBorrar = (DefaultTableModel) tblProveedores.getModel();
+            modeloBorrar.setRowCount(0);
+            stm = conex.createStatement();
+            ResultSet lista;
+            lista = stm.executeQuery("SELECT * FROM proveedores");
+            DefaultTableModel modelo = (DefaultTableModel) tblProveedores.getModel();
+            modelo.setRowCount(0);
+            String ubicacion;
+            while (lista.next()) {
+                if(lista.getString("dirEmpresa").length()==0){
+                    ubicacion = "Sin Registro";
+                }
+                else{
+                    ubicacion = lista.getString("dirEmpresa");
+                }
+                Object data[] = {
+                    lista.getInt("rutEmpresa"),
+                    lista.getString("nomEmpresa"),
+                    lista.getString("correo"),
+                    lista.getInt("telefono"),
+                    lista.getString("tipoEmpresa"),
+                    ubicacion
+                };
+                modelo.addRow(data);
+            }
+            
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+        }
     }
     
     public void customClose(){
@@ -78,6 +116,21 @@ public class Proveedores extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
         }       
     }
+    
+    public int confirmarProducto(int codigo){
+        int contador=0;
+        try{
+                stm=conex.createStatement();
+                ResultSet fila = stm.executeQuery("SELECT COUNT(*) FROM facturaProveedores WHERE rutEmpresa = " + codigo);
+                while(fila.next()){
+                    contador = contador + fila.getInt(1);
+                }
+                stm.close();
+            }catch(SQLException ex){
+                  JOptionPane.showMessageDialog(null, "Error en database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);               
+             }
+        return contador;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,13 +144,20 @@ public class Proveedores extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnPrincipal = new javax.swing.JButton();
-        btnModificar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnCrear = new javax.swing.JButton();
+        cmbCompra = new javax.swing.JButton();
         lblFactura = new javax.swing.JLabel();
         txtFactura = new javax.swing.JTextField();
         btnFacturas = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         btnInventario = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblProveedores = new javax.swing.JTable();
+        btnModificar = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
+        lblLista = new javax.swing.JLabel();
+        txtBuscar = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
+        btnReiniciar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -122,17 +182,17 @@ public class Proveedores extends javax.swing.JFrame {
             }
         });
 
-        btnModificar.setText("<html>Modificar Proveedor<br>Crear Proveedor</html>");
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+        btnCrear.setText("Crear Proveedor");
+        btnCrear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarActionPerformed(evt);
+                btnCrearActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Generar Compra");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cmbCompra.setText("Generar Compra");
+        cmbCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cmbCompraActionPerformed(evt);
             }
         });
 
@@ -146,9 +206,6 @@ public class Proveedores extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Tabla Proveedores");
-
         btnInventario.setText("Inventario");
         btnInventario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,74 +213,159 @@ public class Proveedores extends javax.swing.JFrame {
             }
         });
 
+        tblProveedores.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Rut", "Nombre", "Correo", "Telefono", "Tipo", "Dirección"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblProveedores);
+        if (tblProveedores.getColumnModel().getColumnCount() > 0) {
+            tblProveedores.getColumnModel().getColumn(0).setPreferredWidth(90);
+            tblProveedores.getColumnModel().getColumn(1).setPreferredWidth(150);
+            tblProveedores.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tblProveedores.getColumnModel().getColumn(3).setPreferredWidth(90);
+            tblProveedores.getColumnModel().getColumn(4).setPreferredWidth(100);
+            tblProveedores.getColumnModel().getColumn(5).setPreferredWidth(150);
+        }
+
+        btnModificar.setText("Modificar Proveedor");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
+        btnBorrar.setText("Borrar Proveedor");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
+
+        lblLista.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblLista.setText("Lista de Proveedores");
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        btnReiniciar.setText("Reiniciar Tabla");
+        btnReiniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReiniciarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnFacturas, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModificar)
+                    .addComponent(btnCrear)
+                    .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(169, 169, 169)
-                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(btnFacturas, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(162, 162, 162)
+                                .addComponent(lblLista, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(106, 106, 106)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jButton1)
-                                    .addGap(12, 12, 12))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(lblFactura)
-                                    .addGap(22, 22, 22)))
-                            .addComponent(btnRegresar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(12, 12, 12)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(txtFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(27, 27, 27)
+                        .addComponent(btnReiniciar)
+                        .addGap(82, 82, 82)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(lblFactura)
+                            .addGap(22, 22, 22))
+                        .addComponent(txtFactura, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbCompra)))
                 .addGap(17, 17, 17))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnFacturas, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(172, 172, 172)
                         .addComponent(lblFactura)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18))))
+                        .addComponent(txtFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cmbCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(17, 17, 17)
+                        .addComponent(lblLista)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(btnFacturas, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCrear, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnReiniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -256,15 +398,45 @@ public class Proveedores extends javax.swing.JFrame {
         new MenuPrincipal(usuario,permisos).setVisible(true);
     }//GEN-LAST:event_btnPrincipalActionPerformed
 
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+    private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         this.dispose();
-        new ModificarProveedor(usuario,permisos,proveedor).setVisible(true);
-    }//GEN-LAST:event_btnModificarActionPerformed
+        new CrearProveedor(usuario,permisos).setVisible(true);
+    }//GEN-LAST:event_btnCrearActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void cmbCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCompraActionPerformed
+        int selectedRow = tblProveedores.getSelectedRow();
+        if (selectedRow == -1) {
+             JOptionPane.showMessageDialog(null, "Escoja un Proveedor de la Tabla Primero");
+             return;
+        } 
+        String numFactura = txtFactura.getText();
+        if(!numFactura.matches("\\d+")){
+            JOptionPane.showMessageDialog(null, "Escriba Un Numero de Factura (No Letras)");
+            return;
+        }
+        int numeroFactura = Integer.parseInt(numFactura);
+        try{
+            int conteo = 0;
+            stm = conex.createStatement();
+            ResultSet fila2 = stm.executeQuery("SELECT COUNT(*) FROM facturaProveedores WHERE idFactura = " + numeroFactura );
+            while(fila2.next()){
+                 conteo = conteo + fila2.getInt(1);
+            }
+            if(conteo>0){
+                JOptionPane.showMessageDialog(null, "Factura Ya Existe", "Alerta", JOptionPane.WARNING_MESSAGE);
+                stm.close();
+                return;
+            }
+            stm.close();
+              
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+        }
+        int rut = (int) tblProveedores.getValueAt(selectedRow, 0);
+        String nombre = tblProveedores.getValueAt(selectedRow,1).toString();
         this.dispose();
-        new Compra(usuario,permisos,proveedor,txtFactura.getText()).setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        new Compra(usuario,permisos,numeroFactura,rut,nombre).setVisible(true);
+    }//GEN-LAST:event_cmbCompraActionPerformed
 
     private void btnFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturasActionPerformed
         // TODO add your handling code here:
@@ -274,6 +446,101 @@ public class Proveedores extends javax.swing.JFrame {
         this.dispose();
         new Inventario(usuario,permisos).setVisible(true);
     }//GEN-LAST:event_btnInventarioActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String buscar = txtBuscar.getText().trim();
+        if(buscar.length()==0){
+            JOptionPane.showMessageDialog(null,"Ingrese Algún Nombre para Buscar","Faltan Datos",JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            DefaultTableModel model = (DefaultTableModel) tblProveedores.getModel();
+            model.setRowCount(0);
+            try{
+                DefaultTableModel modeloBorrar = (DefaultTableModel) tblProveedores.getModel();
+                modeloBorrar.setRowCount(0);
+                stm = conex.createStatement();
+                ResultSet lista;
+                lista = stm.executeQuery("SELECT * FROM proveedores WHERE nomEmpresa LIKE '%"+buscar+"%'");
+                DefaultTableModel modelo = (DefaultTableModel) tblProveedores.getModel();
+                modelo.setRowCount(0);
+                String ubicacion;
+                while (lista.next()) {
+                    if(lista.getString("dirEmpresa").length()==0){
+                        ubicacion = "Sin Registro";
+                    }
+                    else{
+                        ubicacion = lista.getString("dirEmpresa");
+                    }
+                    Object data[] = {
+                        lista.getInt("rutEmpresa"),
+                        lista.getString("nomEmpresa"),
+                        lista.getString("correo"),
+                        lista.getInt("telefono"),
+                        lista.getString("tipoEmpresa"),
+                        ubicacion
+                    };
+                    modelo.addRow(data);
+                }         
+            }catch(Exception ex){
+                JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+            }         
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnReiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReiniciarActionPerformed
+        DefaultTableModel model = (DefaultTableModel) tblProveedores.getModel();
+        model.setRowCount(0);
+        crearTabla();
+    }//GEN-LAST:event_btnReiniciarActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+       int fila = tblProveedores.getSelectedRow();
+       if(fila==-1){
+           JOptionPane.showMessageDialog(null,"Seleccione un Producto");
+           return;
+       }
+       int codigo = (int) tblProveedores.getValueAt(fila, 0);
+       if(confirmarProducto(codigo) != 0){
+           JOptionPane.showMessageDialog(null,"Proveedor Existe en Otras Tablas", "Borrado Prohibido", JOptionPane.WARNING_MESSAGE);
+           return;
+       }
+       Object[] opciones = {"Sí", "No"};
+       int respuesta =JOptionPane.showOptionDialog(
+               null,
+               "¿Esta Seguro Que Desea Borrar el Producto?",
+               "Confirmar Eliminacion",
+               JOptionPane.YES_NO_OPTION,
+               JOptionPane.WARNING_MESSAGE,
+               null,
+               opciones,
+               opciones[0]
+       );
+       if(respuesta==1){
+           return;
+       }
+       try{
+            stm = conex.createStatement();
+            stm.executeUpdate("DELETE FROM proveedores WHERE rutEmpresa = " + codigo);
+            JOptionPane.showMessageDialog(null,"Producto Borrado");
+            DefaultTableModel model = (DefaultTableModel) tblProveedores.getModel();
+            model.setRowCount(0);
+            crearTabla();          
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
+        }
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        int selectedRow = tblProveedores.getSelectedRow();
+        if (selectedRow != -1) {
+            int codigo = (int) tblProveedores.getValueAt(selectedRow, 0);
+            this.dispose();
+            new ModificarProducto(usuario,permisos,codigo).setVisible(true);
+        } 
+        else {
+            JOptionPane.showMessageDialog(null, "Escoja un Proveedor de la Tabla Primero");
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,16 +568,23 @@ public class Proveedores extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBorrar;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnCrear;
     private javax.swing.JButton btnFacturas;
     private javax.swing.JButton btnInventario;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnPrincipal;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnReiniciar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton cmbCompra;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFactura;
+    private javax.swing.JLabel lblLista;
+    private javax.swing.JTable tblProveedores;
+    private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtFactura;
     // End of variables declaration//GEN-END:variables
 }

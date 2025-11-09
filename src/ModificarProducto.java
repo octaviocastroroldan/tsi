@@ -365,7 +365,15 @@ public class ModificarProducto extends javax.swing.JFrame {
         if (input2.matches("\\d+") && checkString(input3)) {
             int codigo = codigoModificar;
             int precio = Integer.parseInt(input2);
+            if(precio<=0){
+               JOptionPane.showMessageDialog(null, "Precio debe Ser Mayor a 0", "Advertencia", JOptionPane.WARNING_MESSAGE);
+               return;
+           }
             String nombre = txtNombre.getText();
+            if(nombre.length()==0){
+                JOptionPane.showMessageDialog(null, "Esriba Un Nombre al Producto", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             String comentarios = txaComentarios.getText();
             String tipo = cmbTipo.getSelectedItem().toString();
             byte tipoCodigo;
