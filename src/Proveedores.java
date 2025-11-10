@@ -435,7 +435,7 @@ public class Proveedores extends javax.swing.JFrame {
         int rut = (int) tblProveedores.getValueAt(selectedRow, 0);
         String nombre = tblProveedores.getValueAt(selectedRow,1).toString();
         this.dispose();
-        new Compra(usuario,permisos,numeroFactura,rut,nombre).setVisible(true);
+        new Compra(usuario,permisos,rut,numeroFactura,nombre).setVisible(true);
     }//GEN-LAST:event_cmbCompraActionPerformed
 
     private void btnFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturasActionPerformed
