@@ -493,7 +493,7 @@ public class Proveedores extends javax.swing.JFrame {
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
        int fila = tblProveedores.getSelectedRow();
        if(fila==-1){
-           JOptionPane.showMessageDialog(null,"Seleccione un Producto");
+           JOptionPane.showMessageDialog(null,"Seleccione un Proveedor");
            return;
        }
        int codigo = (int) tblProveedores.getValueAt(fila, 0);
@@ -504,7 +504,7 @@ public class Proveedores extends javax.swing.JFrame {
        Object[] opciones = {"Sí", "No"};
        int respuesta =JOptionPane.showOptionDialog(
                null,
-               "¿Esta Seguro Que Desea Borrar el Producto?",
+               "¿Esta Seguro Que Desea Borrar el Proveedor?",
                "Confirmar Eliminacion",
                JOptionPane.YES_NO_OPTION,
                JOptionPane.WARNING_MESSAGE,
@@ -518,7 +518,7 @@ public class Proveedores extends javax.swing.JFrame {
        try{
             stm = conex.createStatement();
             stm.executeUpdate("DELETE FROM proveedores WHERE rutEmpresa = " + codigo);
-            JOptionPane.showMessageDialog(null,"Producto Borrado");
+            JOptionPane.showMessageDialog(null,"Proveedor Borrado");
             DefaultTableModel model = (DefaultTableModel) tblProveedores.getModel();
             model.setRowCount(0);
             crearTabla();          

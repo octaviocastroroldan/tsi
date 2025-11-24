@@ -126,7 +126,7 @@ public class Inventario extends javax.swing.JFrame {
                     lista.getInt("codProducto"),
                     lista.getString("nomProducto"),
                     lista.getString("nombreTipo"),
-                    lista.getDouble("precioActual"),
+                    lista.getInt("precioActual"),
                     lista.getInt("Stock")
                 };
                 modelo.addRow(data);
@@ -168,7 +168,7 @@ public class Inventario extends javax.swing.JFrame {
                     lista.getInt("codProducto"),
                     lista.getString("nomProducto"),
                     lista.getString("nombreTipo"),
-                    lista.getDouble("precioActual"),
+                    lista.getInt("precioActual"),
                     lista.getInt("Stock")
                 };
                 modelo.addRow(data);
