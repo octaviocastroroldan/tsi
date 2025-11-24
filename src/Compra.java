@@ -574,6 +574,9 @@ public class Compra extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         String codigo = txtCodigo.getText().trim();
         String nombre = txtNombre.getText().trim();
+        if(nombre.length()==0){
+            nombre = "a1n3b2sdocx";
+        }
         cmbBuscar.removeAllItems();
         if(codigo.length()== 0 && nombre.length() == 0){
             return;
@@ -798,7 +801,7 @@ public class Compra extends javax.swing.JFrame {
                 
                 int precioCaja = Integer.parseInt(modelo.getValueAt(i,5).toString());
                               
-                float iva = 1.9f;
+                float iva = 0.19f;
                 
                 int precioTotal = Integer.parseInt(modelo.getValueAt(i,6).toString());
                 
