@@ -268,7 +268,7 @@ public class CrearPedido extends javax.swing.JFrame {
         lblNombreEmpresa.setText("Nombre Empresa:");
 
         lblNumeroFactura.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblNumeroFactura.setText("Numero Factura:");
+        lblNumeroFactura.setText("Numero Pedido:");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Total: ");

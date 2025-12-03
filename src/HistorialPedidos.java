@@ -170,6 +170,9 @@ public class HistorialPedidos extends javax.swing.JFrame {
             ResultSet fila = stm.executeQuery("SELECT MIN(fechaTramite) AS fechaMin, MAX(fechaTramite) AS fechaMax FROM facturaProveedores");
             LocalDate fechaMinima = null, fechaMaxima = null;
             while(fila.next()){
+                if(fila.getDate("fechaMin")==null){
+                    return;
+                }
                 fechaMinima = fila.getDate("fechaMin").toLocalDate();
                 fechaMaxima = fila.getDate("fechaMax").toLocalDate();
             }
