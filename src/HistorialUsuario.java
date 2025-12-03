@@ -9,7 +9,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -19,27 +25,32 @@ import javax.swing.JFrame;
  *
  * @author oct88
  */
-public class Usuarios extends javax.swing.JFrame {
+public class HistorialUsuario extends javax.swing.JFrame {
     Connection conex=null;
     Statement stm=null;
     private String usuario = "hello";
     private boolean permisos = false;
+    private int valorUsuario = 0;
+    private String nombre = "";
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Usuarios.class.getName());
 
     /**
      * Creates new form Usuarios
      */
-    public Usuarios() {
+    public HistorialUsuario() {
         initComponents();
     }
     
-    public Usuarios(String nombre, boolean permisos) {
+    public HistorialUsuario(String nombre, boolean permisos, int valor, String nombreUser) {
         this.usuario = nombre;
         this.permisos = permisos;
+        this.valorUsuario = valor;
+        this.nombre = nombreUser;
         initComponents();
         conectar();
         crearTabla();
         customClose();
+        lblTitulo.setText("Usuario: " + nombreUser + " Rut: " + String.valueOf(valor));
     }
     
     public void customClose(){
@@ -80,21 +91,53 @@ public class Usuarios extends javax.swing.JFrame {
     
     public void crearTabla(){
         try{
-            stm = conex.createStatement();
-            ResultSet lista = stm.executeQuery("SELECT rutUsuario, nomUsuario, prestamo FROM usuarios");
+            
             DefaultTableModel modelo = (DefaultTableModel)tblUsuarios.getModel();
             modelo.setRowCount(0);
             String puede;
+            
+            stm = conex.createStatement();
+            ResultSet lista = stm.executeQuery("SELECT fechaTramite FROM boletas WHERE rutUsuario =" + valorUsuario);           
             while(lista.next()){
-                if(lista.getString("prestamo").equals("0")){
-                    puede = "No Puede Crear Clientes";
-                }
-                else{
-                    puede = "Puede Crear Clientes";
-                }
-                Object data[] = {lista.getString("rutUsuario"), lista.getString("nomUsuario"), puede};
+                puede = "Boleta";
+                Object data[] = {
+                    puede,
+                    lista.getDate("fechaTramite")          
+                };
                 modelo.addRow(data);
             }
+            stm.close();
+            
+            stm = conex.createStatement();
+            lista = stm.executeQuery("SELECT fechaTramite FROM facturaProveedores WHERE rutUsuario =" + valorUsuario);           
+            while(lista.next()){
+                puede = "Factura";
+                Object data[] = {
+                    puede,
+                    lista.getDate("fechaTramite")          
+                };
+                modelo.addRow(data);
+            }
+            stm.close();
+            
+            stm = conex.createStatement();
+            lista = stm.executeQuery("SELECT fechaTramite FROM pagoDeudas WHERE rutUsuario =" + valorUsuario);           
+            while(lista.next()){
+                puede = "Pago Deuda";
+                Object data[] = {
+                    puede,
+                    lista.getDate("fechaTramite")          
+                };
+                modelo.addRow(data);
+            }
+            stm.close();
+            
+            TableRowSorter<TableModel> sorter = new TableRowSorter<>(tblUsuarios.getModel());
+            tblUsuarios.setRowSorter(sorter);
+            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+            sortKeys.add(new RowSorter.SortKey(1, SortOrder.DESCENDING)); 
+            sorter.setSortKeys(sortKeys);
+            sorter.sort();
             
         }catch(Exception ex){
             JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
@@ -115,9 +158,8 @@ public class Usuarios extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         scrTabla = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
-        btnHistorialUsuario = new javax.swing.JButton();
-        btnPermisos = new javax.swing.JButton();
         btnHistorialLogIn = new javax.swing.JButton();
+        lblTitulo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,38 +187,35 @@ public class Usuarios extends javax.swing.JFrame {
         tblUsuarios.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Rut Usuario", "Nombre Usuario", "Permisos"
+                "Tabla", "Fecha"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblUsuarios.setRowHeight(30);
         scrTabla.setViewportView(tblUsuarios);
 
-        btnHistorialUsuario.setText("<html>Historial<br>Usuario</html>");
-        btnHistorialUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHistorialUsuarioActionPerformed(evt);
-            }
-        });
-
-        btnPermisos.setText("Cambiar Permisos");
-        btnPermisos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPermisosActionPerformed(evt);
-            }
-        });
-
-        btnHistorialLogIn.setText("Historial de Accesos");
+        btnHistorialLogIn.setText("Usuarios");
         btnHistorialLogIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHistorialLogInActionPerformed(evt);
             }
         });
+
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblTitulo.setText("jLabel1");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -195,30 +234,25 @@ public class Usuarios extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(20, 20, 20)
                                 .addComponent(scrTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnPermisos)
-                                    .addComponent(btnHistorialUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 3, Short.MAX_VALUE)))
+                                .addGap(0, 146, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(240, 240, 240)
+                                .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(15, 15, 15))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnPermisos, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnHistorialUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(scrTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addComponent(scrTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -262,58 +296,9 @@ public class Usuarios extends javax.swing.JFrame {
         new MenuAcceso().setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void btnHistorialUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialUsuarioActionPerformed
-        int selectedRow = tblUsuarios.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(null, "Seleccione un Usuario");
-            return;
-        }
-        int valor = 0;
-        valor = Integer.parseInt(tblUsuarios.getValueAt(selectedRow, 0).toString());
-        String nombre = tblUsuarios.getValueAt(selectedRow, 1).toString();
-        this.dispose();
-        new HistorialUsuario(usuario,permisos,valor,nombre).setVisible(true);
-        
-    }//GEN-LAST:event_btnHistorialUsuarioActionPerformed
-
-    private void btnPermisosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPermisosActionPerformed
-        int selectedRow = tblUsuarios.getSelectedRow();
-        boolean permitir;
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(null, "Seleccione un Usuario");
-        }
-        else{
-            Object idObject = tblUsuarios.getValueAt(selectedRow, 0);
-            int id = Integer.parseInt(idObject.toString());
-            if(id<0){
-                JOptionPane.showMessageDialog(null, "No Puede Modificar Administradores");
-            }
-            else{
-                Object idObject2 = tblUsuarios.getValueAt(selectedRow, 2);
-                if(idObject2.toString().equals("Puede Crear Clientes")){
-                    permitir = false;
-                }
-                else{
-                    permitir = true;
-                }
-                int permitir2 = permitir ? 1:0;
-                try{
-                    stm = conex.createStatement();
-                    stm.executeUpdate("UPDATE usuarios SET prestamo = " + permitir2 + " WHERE rutUsuario = " + id);
-                    JOptionPane.showMessageDialog(null, "Usuario Modificado");
-                    DefaultTableModel modelo = (DefaultTableModel)tblUsuarios.getModel();         
-                    modelo.setRowCount(0);
-                    crearTabla();
-                }catch(Exception ex){
-                    JOptionPane.showMessageDialog(null,"error en conexion "+ex,"error",1);
-                }
-            }
-        }
-    }//GEN-LAST:event_btnPermisosActionPerformed
-
     private void btnHistorialLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialLogInActionPerformed
         this.dispose();
-        new HistorialAcceso(usuario,permisos).setVisible(true);
+        new Usuarios(usuario,permisos).setVisible(true);
     }//GEN-LAST:event_btnHistorialLogInActionPerformed
 
     /**
@@ -343,12 +328,11 @@ public class Usuarios extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHistorialLogIn;
-    private javax.swing.JButton btnHistorialUsuario;
-    private javax.swing.JButton btnPermisos;
     private javax.swing.JButton btnPrincipal;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblTitulo;
     private javax.swing.JScrollPane scrTabla;
     private javax.swing.JTable tblUsuarios;
     // End of variables declaration//GEN-END:variables

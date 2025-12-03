@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.time.Month;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -31,6 +32,7 @@ public class Compra extends javax.swing.JFrame {
     private int numFactura;
     private int rutProveedor;
     private String nombreProveedor;
+    private List<Object[]> facturas;
     private LocalDate today = LocalDate.now();
     Connection conex=null;
     Statement stm=null;
@@ -41,14 +43,15 @@ public class Compra extends javax.swing.JFrame {
         initComponents();
     }
     
-    public Compra(String nuevo, boolean estado, int proveedor, int factura, String nombre, int rutAntiguo) {
+    public Compra(String nuevo, boolean estado, int proveedor, int factura, String nombre, int rutAntiguo, List<Object[]> lista) {
+        initComponents();
         this.usuario = nuevo;
         this.estado = estado;
         this.numFactura = factura;
         this.rutProveedor = proveedor;
         this.nombreProveedor = nombre;
         this.rutAntiguo = rutAntiguo;
-        initComponents();
+        this.facturas = lista;
         lblNombreEmpresa.setText(lblNombreEmpresa.getText()+ " " + nombre);
         String codigoProveedor = String.valueOf(proveedor);
         String codigoFactura = String.valueOf(factura);
@@ -72,6 +75,7 @@ public class Compra extends javax.swing.JFrame {
         lblTotalPrecio.setText("0");
         conectar();
         customClose();
+        startChecking();
     }
     
     public boolean revisarTabla(String codigo){
@@ -99,6 +103,28 @@ public class Compra extends javax.swing.JFrame {
                 System.exit(0);
             }
         });
+    }
+    
+    public void startChecking(){
+        btnBuscar.setEnabled(true);
+        if(!facturas.isEmpty()){         
+            int codigoProducto = (Integer)facturas.get(0)[0];
+            txtCodigo.setText(String.valueOf(codigoProducto));
+            btnBuscar.doClick();
+            if(cmbBuscar.getItemCount()>0){
+                cmbBuscar.setSelectedIndex(0);
+                btnBuscar.setEnabled(false);
+                txtPaquetes.setText(String.valueOf((Integer)facturas.get(0)[1]));
+                txtUnidad.setText(String.valueOf((Integer)facturas.get(0)[2]));
+                txtPrecio.setText(String.valueOf((Integer)facturas.get(0)[3]));
+                facturas.remove(0);
+                return;
+            }
+            else{
+                facturas.remove(0);
+                return;
+            }
+        }
     }
     
     public void registrarRetiro(){
@@ -747,7 +773,8 @@ public class Compra extends javax.swing.JFrame {
                 totalPrecio1
             };
             modelo.addRow(data);
-            actualizarTotal();
+            actualizarTotal();                          
+            startChecking();
         }
         else{
             JOptionPane.showMessageDialog(null, "Recuerde Ingresar SOLO NUMEROS en Numero de Paquetes, Cantidad Unitaria y  Precio Total Compra","Error de Formulario", JOptionPane.WARNING_MESSAGE);
@@ -837,14 +864,25 @@ public class Compra extends javax.swing.JFrame {
                 stm.executeUpdate("UPDATE productos SET stock = stock + " + agregado + " WHERE codProducto = " + codigoProducto);
                 
                 stm.close();
-                
-                
-                         
+                                
             }
             
-            
+            stm = conex.createStatement();
+                
+            stm.executeUpdate("DELETE FROM detalleFacturaProductos WHERE idFactura =" + rutAntiguo);
+                
+            stm.close();
+                
+            stm = conex.createStatement();
+                
+            stm.executeUpdate("DELETE FROM facturaProveedores WHERE idFactura =" + rutAntiguo);
+                
+            stm.close();
+                     
             conex.commit();
             JOptionPane.showMessageDialog(null, "Factura y Productos Registrados Exitosamente");
+            this.dispose();
+            new HistorialFacturas(usuario,estado).setVisible(true);
                             
         }catch(SQLException ex){
             try {

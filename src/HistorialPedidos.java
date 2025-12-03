@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 /*
@@ -24,6 +26,9 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author oct88
  */
+
+
+
 public class HistorialPedidos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuPrincipal.class.getName());
@@ -283,9 +288,10 @@ public class HistorialPedidos extends javax.swing.JFrame {
         btnProveedores = new javax.swing.JButton();
         cmbFecha = new javax.swing.JComboBox<>();
         lblFecha = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        cmbConfirmarPedido = new javax.swing.JButton();
         txtFacturaId = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        btnBorrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -318,7 +324,7 @@ public class HistorialPedidos extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                true, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -327,14 +333,8 @@ public class HistorialPedidos extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tblDetalles);
         if (tblDetalles.getColumnModel().getColumnCount() > 0) {
-            tblDetalles.getColumnModel().getColumn(0).setResizable(false);
-            tblDetalles.getColumnModel().getColumn(0).setPreferredWidth(150);
-            tblDetalles.getColumnModel().getColumn(1).setResizable(false);
+            tblDetalles.getColumnModel().getColumn(0).setPreferredWidth(110);
             tblDetalles.getColumnModel().getColumn(1).setPreferredWidth(100);
-            tblDetalles.getColumnModel().getColumn(2).setResizable(false);
-            tblDetalles.getColumnModel().getColumn(2).setPreferredWidth(100);
-            tblDetalles.getColumnModel().getColumn(3).setResizable(false);
-            tblDetalles.getColumnModel().getColumn(3).setPreferredWidth(50);
         }
 
         lblFactura.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -411,15 +411,22 @@ public class HistorialPedidos extends javax.swing.JFrame {
         lblFecha.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblFecha.setText("Filtrar Por Fecha");
 
-        jButton1.setText("Confirmar Pedido");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cmbConfirmarPedido.setText("Confirmar Pedido");
+        cmbConfirmarPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cmbConfirmarPedidoActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Numero Factura");
+
+        btnBorrar.setText("Borrar Item");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -443,20 +450,23 @@ public class HistorialPedidos extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(btnProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(349, 349, 349)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(548, 548, 548))
+                                        .addGap(383, 383, 383)
+                                        .addComponent(cmbConfirmarPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(514, 514, 514))
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addComponent(btnDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(25, 25, 25)
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(21, 21, 21))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addComponent(jLabel1)
-                                                .addGap(0, 0, Short.MAX_VALUE))))))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(43, 43, 43))))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGap(17, 17, 17)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -513,21 +523,25 @@ public class HistorialPedidos extends javax.swing.JFrame {
                                     .addComponent(cmbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addComponent(cmbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnProveedores, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(15, 15, 15))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                                .addComponent(jLabel1)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                                        .addComponent(jLabel1))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGap(18, 18, 18)
                                 .addComponent(txtFacturaId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(34, 34, 34)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnProveedores, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(15, 15, 15))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))))
+                                .addGap(18, 18, 18)
+                                .addComponent(cmbConfirmarPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(55, 55, 55))))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -535,8 +549,8 @@ public class HistorialPedidos extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -585,7 +599,7 @@ public class HistorialPedidos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDetallesActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void cmbConfirmarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbConfirmarPedidoActionPerformed
         if (tblFacturas.getSelectedRow() == -1){
             JOptionPane.showMessageDialog(null, "Escoja un Pedido (Tabla de La Izquierda)");
             return;
@@ -606,22 +620,64 @@ public class HistorialPedidos extends javax.swing.JFrame {
             stm.close();
             String nombreP = tblFacturas.getValueAt(tblFacturas.getSelectedRow(), 1).toString();
             stm = conex.createStatement();
-            fila.close();
             int rut = 0;
             fila = stm.executeQuery("SELECT rutEmpresa FROM proveedores WHERE nomEmpresa = '" + nombreP + "'");
             while(fila.next()){
                 rut = fila.getInt("rutEmpresa");
             }
             stm.close();
-            fila.close();
+
+            stm = conex.createStatement();
+            List<Object[]> facturas = new ArrayList<>();
+            fila = stm.executeQuery("SELECT * FROM detalleFacturaProductos WHERE idFactura = " + rutAntiguo);
+            while(fila.next()){
+                Object[] row = {
+                    fila.getInt("codProducto"),
+                    fila.getInt("cantidad"),
+                    fila.getInt("cantidadUnitaria"),
+                    fila.getInt("precioCompra"),
+                    fila.getInt("total"),
+                };
+                facturas.add(row);
+                
+            }
+   
+            
             this.dispose();
-            new Compra(usuario,permisos,rut,factura,nombreP,rutAntiguo).setVisible(true);
+            new Compra(usuario,permisos,rut,factura,nombreP,rutAntiguo, facturas).setVisible(true);
             
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "ERROR DE BASE DE DATOS");
+            JOptionPane.showMessageDialog(null, "ERROR DE BASE DE DATOS " + ex.getMessage());
             return;
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_cmbConfirmarPedidoActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        DefaultTableModel modelo = (DefaultTableModel) tblDetalles.getModel();
+        int selectedRow = tblDetalles.getSelectedRow();
+        if (selectedRow != -1) {
+            Object[] opciones = {"Sí", "No"};
+            int respuesta =JOptionPane.showOptionDialog(
+                    null,
+                    "¿Desea Que el Sistema Le Advierta de Productos Vencidos No Revisados?",
+                    "Confirmar Factura",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]
+            );
+            if(respuesta==1){
+                return;
+            }
+            else{
+                modelo.removeRow(selectedRow);
+            }
+        } 
+        else {
+            JOptionPane.showMessageDialog(null, "Escoja un item Para Borrar");
+        }
+    }//GEN-LAST:event_btnBorrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -650,13 +706,14 @@ public class HistorialPedidos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btgRevisar;
+    private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnDetalles;
     private javax.swing.JButton btnProveedores;
     private javax.swing.JButton btnRegreso;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton cmbConfirmarPedido;
     private javax.swing.JComboBox<String> cmbFecha;
     private javax.swing.JComboBox<String> cmbProveedor;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

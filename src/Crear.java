@@ -275,14 +275,18 @@ public class Crear extends javax.swing.JFrame {
         String nuevo;
         boolean revisar = !txtRut.getText().trim().isEmpty() && !txtNombre.getText().trim().isEmpty()&& !pswPassword1.getText().trim().isEmpty();
         if (input.matches("\\d+")) {
+            if(input.length()<8){
+                JOptionPane.showMessageDialog(null, "El Rut Debe Ser Valido (Remplaze K Por 0)", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             if(revisar){
                 valor = Integer.parseInt(input);
                 if(admin){
                     valor = valor * -1;
                 }
                 if (pswPassword1.getText().equals(pswPassword2.getText())){
-                    if(pswPassword1.getText().length()<6){
-                        JOptionPane.showMessageDialog(null, "La contraseña debe ser minimo 6 caracteres", "Error", JOptionPane.ERROR_MESSAGE);
+                    if(pswPassword1.getText().length()<10){
+                        JOptionPane.showMessageDialog(null, "La contraseña debe ser minimo 10 caracteres", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     nuevo = BCrypt.hashpw(pswPassword1.getText(), BCrypt.gensalt());
@@ -310,7 +314,7 @@ public class Crear extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Complete Todas las Casillas" , "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Para Rut Ingrese Solo Numeros (Sin Puntos ni Guion)", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Para Rut Ingrese Solo Numeros (Sin Puntos ni Guion. Remplaze K Por 0)", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
