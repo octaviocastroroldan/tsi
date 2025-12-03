@@ -107,6 +107,7 @@ public class Compra extends javax.swing.JFrame {
     
     public void startChecking(){
         btnBuscar.setEnabled(true);
+        int ventaUnidad = 0;
         if(!facturas.isEmpty()){         
             int codigoProducto = (Integer)facturas.get(0)[0];
             txtCodigo.setText(String.valueOf(codigoProducto));
@@ -117,6 +118,9 @@ public class Compra extends javax.swing.JFrame {
                 txtPaquetes.setText(String.valueOf((Integer)facturas.get(0)[1]));
                 txtUnidad.setText(String.valueOf((Integer)facturas.get(0)[2]));
                 txtPrecio.setText(String.valueOf((Integer)facturas.get(0)[3]));
+                ventaUnidad = (Integer)facturas.get(0)[3] / (Integer)facturas.get(0)[2];
+                ventaUnidad = (int)(ventaUnidad * 1.2);
+                txtPrecioVenta.setText(String.valueOf(ventaUnidad));
                 facturas.remove(0);
                 return;
             }
@@ -217,6 +221,8 @@ public class Compra extends javax.swing.JFrame {
         lblTotalPrecio = new javax.swing.JLabel();
         btnProveedores = new javax.swing.JButton();
         cmbBorrar1 = new javax.swing.JButton();
+        lblTipo1 = new javax.swing.JLabel();
+        txtPrecioVenta = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -262,7 +268,7 @@ public class Compra extends javax.swing.JFrame {
         lblNombre.setText("Nombre Producto");
 
         lblTipo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblTipo.setText("Precio Paquete");
+        lblTipo.setText("Precio Proveedor Paquete");
 
         lblPago.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblPago.setText("Tipo Pago");
@@ -302,11 +308,11 @@ public class Compra extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Código", "Nombre", "Cantidad Unidad", "Cantidad Caja", "Fecha Vencimiento", "Precio Paquete", "Total"
+                "Código", "Nombre", "Cantidad Unidad", "Cantidad Caja", "Fecha Vencimiento", "Precio Paquete", "Total Compra", "Precio Venta"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -389,6 +395,15 @@ public class Compra extends javax.swing.JFrame {
             }
         });
 
+        lblTipo1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblTipo1.setText("Precio Venta de Unidad ");
+
+        txtPrecioVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrecioVentaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -421,18 +436,6 @@ public class Compra extends javax.swing.JFrame {
                                 .addGap(14, 14, 14)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lblTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(lblPago)
-                                            .addComponent(cmbYear, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(cmbYear1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(cmbMes1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -446,7 +449,21 @@ public class Compra extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(cmbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addComponent(btnPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(lblTipo1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtPrecioVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(lblPago)
+                                                .addComponent(cmbYear, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(18, 18, 18)
+                                            .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(lblTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(4, 4, 4)
@@ -462,7 +479,8 @@ public class Compra extends javax.swing.JFrame {
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addComponent(txtPaquetes, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(lblUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(lblUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                                         .addComponent(txtUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(12, 12, 12)))))
@@ -530,8 +548,12 @@ public class Compra extends javax.swing.JFrame {
                             .addComponent(lblTipo)
                             .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblTipo1)
+                            .addComponent(txtPrecioVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
                         .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblFechaFactura)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -544,12 +566,10 @@ public class Compra extends javax.swing.JFrame {
                             .addComponent(cmbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(cmbBorrar1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -728,6 +748,7 @@ public class Compra extends javax.swing.JFrame {
         String paquetes = txtPaquetes.getText().trim();
         String unidad = txtUnidad.getText().trim();
         String precio = txtPrecio.getText().trim();
+        String precioV = txtPrecioVenta.getText().trim();
         
         if(cmbDia1.getSelectedIndex()==-1 || cmbMes1.getSelectedIndex()==-1 || cmbYear1.getSelectedIndex()==-1){
             JOptionPane.showMessageDialog(null, "Recuerde Ingresar La Fecha de Vencimiento (Año - Mes - Dia)","Error de Formulario", JOptionPane.WARNING_MESSAGE);
@@ -747,11 +768,17 @@ public class Compra extends javax.swing.JFrame {
             return;
         }
         
-        if(paquetes.matches("\\d+") && unidad.matches("\\d+") && precio.matches("\\d+")){
-            if(Integer.parseInt(paquetes)<=0 || Integer.parseInt(unidad)<=0 || Integer.parseInt(precio)<=0){
+        if(paquetes.matches("\\d+") && unidad.matches("\\d+") && precio.matches("\\d+") && precioV.matches("\\d+")){
+            if(Integer.parseInt(paquetes)<=0 || Integer.parseInt(unidad)<=0 || Integer.parseInt(precio)<=0 || Integer.parseInt(precioV)<=0){
                 JOptionPane.showMessageDialog(null, "Ingrese Valores Mayores a 0 en: Numero de Paquetes, Cantidad Unitaria y Precio","Error de Formulario", JOptionPane.WARNING_MESSAGE);
                 return;
             }
+            int precioTentativoUnidad = Integer.parseInt(precio)/Integer.parseInt(unidad);
+            if(precioTentativoUnidad>=Integer.parseInt(precioV)){
+                JOptionPane.showMessageDialog(null, "El valor unitario para vender a clientes debe ser por lo menos mayor a: " + precioTentativoUnidad,"Alerta", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int precioVenta = Integer.parseInt(precioV);
             int totalPrecio = Integer.parseInt(precio) * Integer.parseInt(paquetes);
             String totalPrecio1 = String.valueOf(totalPrecio);
             String item = cmbBuscar.getSelectedItem().toString();
@@ -770,14 +797,15 @@ public class Compra extends javax.swing.JFrame {
                 paquetes,
                 fecha,
                 precio,
-                totalPrecio1
+                totalPrecio1,
+                precioVenta
             };
             modelo.addRow(data);
             actualizarTotal();                          
             startChecking();
         }
         else{
-            JOptionPane.showMessageDialog(null, "Recuerde Ingresar SOLO NUMEROS en Numero de Paquetes, Cantidad Unitaria y  Precio Total Compra","Error de Formulario", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Recuerde Ingresar SOLO NUMEROS en Numero de Paquetes, Cantidad Unitaria, Precio Paquete y Precio Venta","Error de Formulario", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnIngresarActionPerformed
 
@@ -786,6 +814,10 @@ public class Compra extends javax.swing.JFrame {
         int size = modelo1.getRowCount();
         if(size == 0){
             JOptionPane.showMessageDialog(null, "El carro esta vacio");
+            return;
+        }
+        if(!facturas.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Items del Pedido Por Revisar. Ingreselos con Ingresar Item.");
             return;
         }
         int yearly = Integer.parseInt(cmbYear.getSelectedItem().toString());
@@ -828,7 +860,7 @@ public class Compra extends javax.swing.JFrame {
             DefaultTableModel modelo = (DefaultTableModel) tblCarro.getModel();
             for(int i = 0; i < modelo.getRowCount(); i++){
                 int codigoProducto = Integer.parseInt(modelo.getValueAt(i, 0).toString());
-                
+                int valorVender = Integer.parseInt(modelo.getValueAt(i, 7).toString());
                 String fechaUnida = modelo.getValueAt(i, 4).toString();
                 String[] parts = fechaUnida.split("/", 3);              
                 daily = Integer.parseInt(parts[0]);
@@ -861,7 +893,7 @@ public class Compra extends javax.swing.JFrame {
                 
                 stm = conex.createStatement();
                 
-                stm.executeUpdate("UPDATE productos SET stock = stock + " + agregado + " WHERE codProducto = " + codigoProducto);
+                stm.executeUpdate("UPDATE productos SET stock = stock + " + agregado + ", precioActual = + " + valorVender + " WHERE codProducto = " + codigoProducto);
                 
                 stm.close();
                                 
@@ -919,6 +951,10 @@ public class Compra extends javax.swing.JFrame {
         actualizarTotal();
     }//GEN-LAST:event_cmbBorrar1ActionPerformed
 
+    private void txtPrecioVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioVentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecioVentaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -973,6 +1009,7 @@ public class Compra extends javax.swing.JFrame {
     private javax.swing.JLabel lblPaquete;
     private javax.swing.JLabel lblRutEmpresa;
     private javax.swing.JLabel lblTipo;
+    private javax.swing.JLabel lblTipo1;
     private javax.swing.JLabel lblTipo2;
     private javax.swing.JLabel lblTotalPrecio;
     private javax.swing.JLabel lblUnidad;
@@ -981,6 +1018,7 @@ public class Compra extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPaquetes;
     private javax.swing.JTextField txtPrecio;
+    private javax.swing.JTextField txtPrecioVenta;
     private javax.swing.JTextField txtUnidad;
     // End of variables declaration//GEN-END:variables
 }
