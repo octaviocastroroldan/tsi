@@ -107,7 +107,7 @@
                       <Component id="btnInventario" alignment="3" min="-2" pref="68" max="-2" attributes="0"/>
                       <Component id="btnVenta" alignment="3" min="-2" pref="64" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="53" max="32767" attributes="0"/>
+                  <EmptySpace pref="48" max="32767" attributes="0"/>
                   <Component id="btnSalir" min="-2" pref="68" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
               </Group>
@@ -168,7 +168,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnVenta">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Venta Productos"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Venta Productos&lt;br&gt;Perdida Productos&lt;/html&gt;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVentaActionPerformed"/>

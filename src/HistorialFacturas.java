@@ -109,27 +109,27 @@ public class HistorialFacturas extends javax.swing.JFrame {
             int yearSelected, semesterSelected;
             String providerSelected = cmbProveedor.getSelectedItem().toString();
             if(indexFecha==ultimoElemento && indexProveedor==0){
-                fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa ORDER BY fp.fechaTramite DESC");
+                fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE fp.idFactura > 120 ORDER BY fp.fechaTramite DESC");
             }else if(indexProveedor!=0 && indexFecha==ultimoElemento){
-                fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE p.nomEmpresa = '" + providerSelected + "' ORDER BY fp.fechaTramite DESC");
+                fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE p.nomEmpresa = '" + providerSelected + "' AND fp.idFactura > 120 ORDER BY fp.fechaTramite DESC");
             }else{
                 String parts[] = cmbFecha.getSelectedItem().toString().split("-");
                 yearSelected = Integer.parseInt(parts[0]);
                 semesterSelected = Integer.parseInt(parts[1]);
                 if(indexProveedor==0){
                     if(semesterSelected == 1){
-                        fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE fechaTramite BETWEEN '" + yearSelected + "-01-01' AND '" + yearSelected + "-06-30' ORDER BY fp.fechaTramite DESC");
+                        fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE fp.idFactura > 120 AND fechaTramite BETWEEN '" + yearSelected + "-01-01' AND '" + yearSelected + "-06-30' ORDER BY fp.fechaTramite DESC");
                     }
                     else{
-                        fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE fechaTramite BETWEEN '" + yearSelected + "-07-01' AND '" + yearSelected + "-12-31' ORDER BY fp.fechaTramite DESC");
+                        fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE fp.idFactura > 120 AND fechaTramite BETWEEN '" + yearSelected + "-07-01' AND '" + yearSelected + "-12-31' ORDER BY fp.fechaTramite DESC");
                     }
                 }
                 else{
                     if(semesterSelected == 1){
-                        fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE fechaTramite BETWEEN '" + yearSelected + "-01-01' AND '" + yearSelected + "-06-30' AND p.nomEmpresa = '" + providerSelected + "' ORDER BY fp.fechaTramite DESC");
+                        fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE fp.idFactura > 120 AND fechaTramite BETWEEN '" + yearSelected + "-01-01' AND '" + yearSelected + "-06-30' AND p.nomEmpresa = '" + providerSelected + "' ORDER BY fp.fechaTramite DESC");
                     }
                     else{
-                        fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE fechaTramite BETWEEN '" + yearSelected + "-07-01' AND '" + yearSelected + "-12-31'  AND p.nomEmpresa = '" + providerSelected + "' ORDER BY fp.fechaTramite DESC");
+                        fila = stm.executeQuery("SELECT fp.idFactura, p.nomEmpresa, u.nomUsuario, fp.fechaTramite, fp.fechaVencimiento, fp.medioPago, fp.total FROM facturaProveedores fp JOIN usuarios u ON u.rutUsuario = fp.rutUsuario JOIN proveedores p ON p.rutEmpresa = fp.rutEmpresa WHERE fp.idFactura > 120 AND fechaTramite BETWEEN '" + yearSelected + "-07-01' AND '" + yearSelected + "-12-31'  AND p.nomEmpresa = '" + providerSelected + "' ORDER BY fp.fechaTramite DESC");
                     }
                 }
             }

@@ -42,8 +42,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         conectar();
         initComponents();
         customClose();
+        int rut = Integer.parseInt(usuario);
         txtAdvertencia.setVisible(false);
-        if (permisos == false){
+        if (rut>0){
             btnAdministrador.setEnabled(false);
             txtAdvertencia.setVisible(true);
         }
@@ -142,7 +143,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnVenta.setText("Venta Productos");
+        btnVenta.setText("<html>Venta Productos<br>Perdida Productos</html>");
         btnVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVentaActionPerformed(evt);
@@ -219,7 +220,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addComponent(btnCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14))
         );

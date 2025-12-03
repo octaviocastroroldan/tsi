@@ -192,6 +192,7 @@ public class MenuAcceso extends javax.swing.JFrame {
                     if(BCrypt.checkpw(inputPassword, hashedPassword)){
                         int valorObtenido = lista.getInt("rutUsuario");
                         boolean estado = lista.getBoolean("prestamo");
+                        //JOptionPane.showMessageDialog(null,valorObtenido, "Rut", JOptionPane.ERROR_MESSAGE);
                         this.dispose();
                         registrarAcceso(valorObtenido);
                         new MenuPrincipal(String.valueOf(valorObtenido), estado).setVisible(true); 
